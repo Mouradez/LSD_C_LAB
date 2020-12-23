@@ -2,15 +2,47 @@
 #include <stdio.h>
 #define N 10
 
+
+
 float *lu(float A[N][N], float B[N], int n)
 {
-
-  /******Implement the solution here******/
-  /***************************************/
-
-
-  /***************************************/
-  return (x);
+	float  *X , L[N][N] , Y[N] ;
+	X = (float *)malloc(sizeof(float));
+    /*elimination de gauss en A pour obtenir L et U*/
+	for(int k = 0 ; k < n-1 ; k++)
+		{
+		     for(int i = k+1 ; i < n ; i++) 
+			 {
+				 L[i][k] = A[i][k] / A[k][k];	
+				 for(int j = k + 1; j < n; j++)	
+					 {
+					        A[i][j] = A[i][j]- L[i][k] * A[k][j];
+					 }
+			}
+		}
+	     /*calculer Y avec LY=B */
+   Y[0] = B[0];
+   for(int i = 1 ; i < n ; i++)
+	 {
+	 	 int s = 0;
+		 for(int j = 0 ; j < i ; j++)
+			 {
+				s= s + L[i][j] * Y[j];
+			 }
+			Y[i] = B[i] - s;
+	 }
+	  /*calculez X avec UX=Y */
+	X[n-1] = Y[n-1] / A[n-1][n-1];
+	for(int i = n-2 ; i >= 0 ; i--)
+		{
+			float s = 0;
+			for(int j = i + 1 ; j <= n-1 ; j++)
+			{
+				s += A[i][j] * X[j];
+			}
+		 X[i] = (Y[i] - s)/A[i][i];
+		 }      
+  return (X);
 }
 
 int main()
